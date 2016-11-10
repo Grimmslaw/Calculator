@@ -212,6 +212,11 @@ public class CalcView extends javax.swing.JFrame {
 
         btnDecimal.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         btnDecimal.setText(".");
+        btnDecimal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDecimalActionPerformed(evt);
+            }
+        });
 
         btnZero.setText("0");
         btnZero.addActionListener(new java.awt.event.ActionListener() {
@@ -320,6 +325,8 @@ public class CalcView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOneActionPerformed
+        setFocusable(true);
+        
         if (isResult) {
             isResult = false;
         }
@@ -452,8 +459,14 @@ public class CalcView extends javax.swing.JFrame {
             resultString = Integer.toString(resultInt);
         }
         
+        expression = resultString;
+        
         textDisplay.setText(resultString);
     }//GEN-LAST:event_btnEqualsActionPerformed
+
+    private void btnDecimalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecimalActionPerformed
+        expression += ".";
+    }//GEN-LAST:event_btnDecimalActionPerformed
 
     /**
      * @param args the command line arguments
