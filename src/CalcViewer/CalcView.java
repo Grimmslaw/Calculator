@@ -58,6 +58,23 @@ public class CalcView extends javax.swing.JFrame {
         return result;
     }
     
+    public void ifThenAppend(char op) {
+        if (!hasPattern(expression)) {
+            expression += op;
+        }
+    }
+    
+    public void ifThenAppendNum(String ex) {
+        if(isResult && !hasPattern(expression)) {
+            isResult = false;
+            expression = "";
+        }
+        
+        expression += ex;
+        
+        textDisplay.setText(expression);
+    }
+    
     // same story as above with the regex not working for me
     public boolean hasPattern(String input) {
         if (input.contains("+")) {
@@ -123,6 +140,11 @@ public class CalcView extends javax.swing.JFrame {
         });
 
         btnPositiveNegative.setText("+/-");
+        btnPositiveNegative.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPositiveNegativeActionPerformed(evt);
+            }
+        });
 
         btnClearEntry.setText("CE");
 
@@ -325,71 +347,39 @@ public class CalcView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOneActionPerformed
-        setFocusable(true);
-        
-        if (isResult) {
-            isResult = false;
-        }
-        expression += "1";
-        textDisplay.setText(expression);
+        ifThenAppendNum("1");
     }//GEN-LAST:event_btnOneActionPerformed
 
     private void btnTwoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTwoActionPerformed
-        if (isResult) {
-            isResult = false;
-        }
-        expression += "2";
-        textDisplay.setText(expression);
+        ifThenAppendNum("2");
     }//GEN-LAST:event_btnTwoActionPerformed
 
     private void btnThreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThreeActionPerformed
-        if (isResult) {
-            isResult = false;
-        }
-        expression += "3";
-        textDisplay.setText(expression);
+        ifThenAppendNum("3");
     }//GEN-LAST:event_btnThreeActionPerformed
 
     private void btnFourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFourActionPerformed
-        if (isResult) {
-            isResult = false;
-        }
-        expression += "4";
-        textDisplay.setText(expression);
+        ifThenAppendNum("4");
     }//GEN-LAST:event_btnFourActionPerformed
 
     private void btnFiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiveActionPerformed
-        if (isResult) {
-            isResult = false;
-        }
-        expression += "5";
-        textDisplay.setText(expression);
+        ifThenAppendNum("5");
     }//GEN-LAST:event_btnFiveActionPerformed
 
     private void btnSixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSixActionPerformed
-        if (isResult) {
-            isResult = false;
-        }
-        expression += "6";
-        textDisplay.setText(expression);
+        ifThenAppendNum("6");
     }//GEN-LAST:event_btnSixActionPerformed
 
     private void btnSevenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSevenActionPerformed
-        expression += "7";
-        textDisplay.setText(expression);
+        ifThenAppendNum("7");
     }//GEN-LAST:event_btnSevenActionPerformed
 
     private void btnEightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEightActionPerformed
-        expression += "8";
-        textDisplay.setText(expression);
+        ifThenAppendNum("8");
     }//GEN-LAST:event_btnEightActionPerformed
 
     private void btnNineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNineActionPerformed
-        if (isResult) {
-            isResult = false;
-        }
-        expression += "9";
-        textDisplay.setText(expression);
+        ifThenAppendNum("9");
     }//GEN-LAST:event_btnNineActionPerformed
 
     private void btnZeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZeroActionPerformed
@@ -410,27 +400,19 @@ public class CalcView extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClearAllActionPerformed
 
     private void btnPlusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlusActionPerformed
-        if (!hasPattern(expression)) {
-            expression += "+";
-        }
+        ifThenAppend('+');
     }//GEN-LAST:event_btnPlusActionPerformed
 
     private void btnSubtractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubtractActionPerformed
-        if (!hasPattern(expression)) {
-            expression += "-";
-        }
+        ifThenAppend('-');
     }//GEN-LAST:event_btnSubtractActionPerformed
 
     private void btnMultiplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultiplyActionPerformed
-        if (!hasPattern(expression)) {
-            expression += "*";
-        }
+        ifThenAppend('*');
     }//GEN-LAST:event_btnMultiplyActionPerformed
 
     private void btnDivideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDivideActionPerformed
-        if (!hasPattern(expression)) {
-            expression += "/";
-        }
+        ifThenAppend('/');
     }//GEN-LAST:event_btnDivideActionPerformed
 
     private void btnEqualsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEqualsActionPerformed
@@ -465,8 +447,36 @@ public class CalcView extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEqualsActionPerformed
 
     private void btnDecimalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecimalActionPerformed
-        expression += ".";
+        boolean isTwoTerm = false;
+        
+        if (expression.contains("+")) {
+            expressionArray = expression.split("\\+");
+            isTwoTerm = true;
+        } else if (expression.contains("-")) {
+            expressionArray = expression.split("-");
+            isTwoTerm = true;
+        } else if (expression.contains("*")) {
+            expressionArray = expression.split("\\*");
+            isTwoTerm = true;
+        } else if (expression.contains("/")) {
+            expressionArray = expression.split("/");
+            isTwoTerm = true;
+        }
+        
+        if (isTwoTerm) {
+            if (!expressionArray[1].contains(".")) {
+                expression += ".";
+            }
+        } else if (!isTwoTerm && !expression.contains(".")) {
+            expression += ".";
+        }
+        
+        textDisplay.setText(expression);
     }//GEN-LAST:event_btnDecimalActionPerformed
+
+    private void btnPositiveNegativeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPositiveNegativeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPositiveNegativeActionPerformed
 
     /**
      * @param args the command line arguments
